@@ -1,107 +1,13 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react'
-import {
-  Routes, Route, Link, useMatch
-} from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
+import Menu from './components/Menu'
+import Footer from './components/Footer'
+import AnecdoteList from './components/AnecdoteList'
+import Anecdote  from './components/Anecdote'
+import About from './components/About'
+import CreateNew from './components/CreateNew'
+import Notification from './components/Notification'
 
-const Menu = () => {
-  const padding = {
-    paddingRight: 5
-  }
-  return (
-    <div>
-      <Link to='/' style={padding}>anecdotes</Link>
-      <Link to='/create' style={padding}>create new</Link>
-      <Link to='/about' style={padding}>about</Link>
-    </div>
-  )
-}
-
-const AnecdoteList = ({ anecdotes }) => (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id}><Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link></li>)}
-    </ul>
-  </div>
-)
-
-const Anecdote = ({ anecdote }) => {
-  return (
-    <div>
-      <h2>{anecdote.content} by {anecdote.author}</h2>
-      <p>has {anecdote.votes} votes</p>
-      <p>for more info see <a href={anecdote.info} target='_blank' rel="noreferrer">{anecdote.info}</a></p>
-    </div>
-  )
-}
-
-const About = () => (
-  <div>
-    <h2>About anecdote app</h2>
-    <p>According to Wikipedia:</p>
-
-    <em>An anecdote is a brief, revealing account of an individual person or an incident.
-      Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
-      such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
-      An anecdote is &quot;a story with a point.&quot;</em>
-
-    <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
-  </div>
-)
-
-const Footer = () => {
-  const style = {
-    marginTop: 10
-  }
-  return (
-    <div style={style}>
-      <hr />
-      Anecdote app for <a href='https://fullstackopen.com/en/part7' target='_blank' rel="noreferrer">Full Stack Open, Advanced Routing</a>.
-
-      See <a href='https://github.com/bayodesegun/fullstackopen-react-router/routed-anecdotes/blob/main/src/App.jsx' target='_blank' rel="noreferrer">https://github.com/bayodesegun/fullstackopen-react-router/routed-anecdotes/blob/main/src/App.jsx</a> for the source code.
-    </div>
-  )
-}
-
-const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    props.addNew({
-      content,
-      author,
-      info,
-      votes: 0
-    })
-  }
-
-  return (
-    <div>
-      <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
-        </div>
-        <div>
-          author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
-        </div>
-        <div>
-          url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
-        </div>
-        <button>create</button>
-      </form>
-    </div>
-  )
-
-}
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -151,9 +57,10 @@ const App = () => {
     <>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification notification={notification} />
       <Routes>
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
-        <Route path='/create' element={<CreateNew addNew={addNew} />} />
+        <Route path='/create' element={<CreateNew addNew={addNew} setNotification={setNotification}  />} />
         <Route path='/about' element={<About />} />
         <Route path='/anecdotes/:id' element={<Anecdote anecdote={anecdote} />} />
       </Routes>
